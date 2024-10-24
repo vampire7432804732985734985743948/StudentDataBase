@@ -8,6 +8,7 @@ namespace Problem.StudentDataBase
 {
     internal class Student
     {
+        public string FieldOfStudy { get; private set; }
         public string? Name { get; private set; }
         public string? LastName { get; private set; }
         public string? Address { get; private set; }
@@ -18,16 +19,16 @@ namespace Problem.StudentDataBase
 
         public string AlbumNumber
         {
-            get { return _albumNumber; } // Use backing field
+            get { return _albumNumber; }
             private set
             {
                 if (value.Length != NUMBER_OF_DIGITS_ALBUM_NUMBER)
                 {
-                    throw new ArgumentException("Enter proper data");
+                    _albumNumber = "Unknown";
                 }
                 else
                 {
-                    _albumNumber = value; // Use backing field
+                    _albumNumber = value;
                 }
             }
         }
@@ -40,15 +41,13 @@ namespace Problem.StudentDataBase
                 if (_pesselNumber != null)
                     return _pesselNumber;
                 else
-                {
                     return _pesselNumber = string.Empty;
-                }
             }
             set
             {
                 if (value.Length != NUMBER_OF_DIGITS_PESSEL || value == null)
                 {
-                    throw new ArgumentException("Enter a propper data"); 
+                    _pesselNumber =  "Unknown";
                 }
                 else
                 {
@@ -59,7 +58,7 @@ namespace Problem.StudentDataBase
 
         public string? Sex { get; private set; }
 
-        public Student(string? name = "Unknown", string? lastName = "Unknown", string? sex = "Unknown", string? pesselNumber = "Unknown", string? albumNumber = "Unknown", string? address = "Unknown")
+        public Student(string? name = "Unknown", string? lastName = "Unknown", string? sex = "Unknown", string? pesselNumber = "Unknown", string? albumNumber = "Unknown", string FieldOfStydy = "Unknown", string? address = "Unknown")
         {
             Name = name ?? "Unknown";
             LastName = lastName ?? "Unknown";
@@ -67,6 +66,7 @@ namespace Problem.StudentDataBase
             PesselNumber = pesselNumber ?? "Unknown";
             AlbumNumber = albumNumber ?? "Unknown";
             Address = address ?? "Unknown";
+            FieldOfStudy = FieldOfStydy ?? "Unknown";
         }
     }
 }

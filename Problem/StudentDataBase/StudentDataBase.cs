@@ -8,6 +8,7 @@ namespace Problem.StudentDataBase
 {
     internal class StudentDataBase
     {
+
         private List<Student> _students = new List<Student>();
 
         public void AddStudent()
@@ -41,7 +42,10 @@ namespace Problem.StudentDataBase
             string? address = Console.ReadLine();
             return (name, lastName, sex, pesselNumber, albumNumber, address);
         }
-
+        public void SaveAllData()
+        {
+            JSONSerializer.SaveAllData(JSONSerializer.SerializeData(_students));
+        }
         public void ShowAllStudents()
         {
             foreach (var student in _students)
@@ -78,9 +82,24 @@ namespace Problem.StudentDataBase
             }
             return students;
         }
-        public void SortByLastName()
+        public List<Student> SortByLastName()
         {
-
+            return _students.OrderByDescending(student => student.LastName).ToList();
         }
+        public List<Student> SortByFirstName()
+        {
+            return _students.OrderByDescending(student => student.Name).ToList();
+        }
+        public void DeleteStudentById(string albumNumber)
+        {
+            foreach(var student in _students)
+            {
+                if (student.AlbumNumber == albumNumber)
+                {
+                    _students.Remove(student);
+                }
+            }
+        }
+
     }
 }
