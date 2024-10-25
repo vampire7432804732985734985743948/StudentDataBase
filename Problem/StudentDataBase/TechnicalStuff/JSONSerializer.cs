@@ -27,12 +27,13 @@ namespace Problem.StudentDataBase.TechnicalStuff
                 Directory.CreateDirectory(folderPath);
 
                 File.Create(filePath).Close();
-                File.AppendAllText(filePath, SerializeData(data));
+                File.WriteAllText(filePath, SerializeData(data));
+
                 ConsoleInterfaceManager.DrawColoredText(new StringBuilder("The file was saved in: " + filePath), ConsoleColor.Green);
             }
             else
             {
-                Console.WriteLine("The datum is empty");
+                Console.WriteLine("The data are empty");
             }
         }
 
@@ -42,7 +43,7 @@ namespace Problem.StudentDataBase.TechnicalStuff
 
             if (readingFilePath != null && File.Exists(readingFilePath))
             {
-                var jsonString = File.ReadAllText(filePath);
+                var jsonString = File.ReadAllText(readingFilePath);
                 if (jsonString != null && !string.IsNullOrEmpty(jsonString))
                     return JsonSerializer.Deserialize<T>(jsonString);
                 else
