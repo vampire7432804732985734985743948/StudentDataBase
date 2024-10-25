@@ -71,7 +71,7 @@ namespace Problem.StudentDataBase
                     return student;
                 }
             }
-            return new Student(default, default, default, default, default,default,default, default);
+            return new Student(default, default, default, default, default, default, default, default);
         }
         public List<Student> FindStudentByLastName(string lastName)
         {
@@ -95,7 +95,7 @@ namespace Problem.StudentDataBase
         }
         public void DeleteStudentById(string albumNumber)
         {
-            foreach(var student in _students)
+            foreach (var student in _students)
             {
                 if (student.AlbumNumber == albumNumber)
                 {

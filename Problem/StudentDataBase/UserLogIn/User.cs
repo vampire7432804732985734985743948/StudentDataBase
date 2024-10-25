@@ -25,14 +25,13 @@ namespace Problem.StudentDataBase.UserLogIn
             }
             else { return false; }
         }
-
         public void SelectLecturer()
         {
             Lecturer? selectedLecturer = null;
             List<Lecturer> lecturers = GetLecturerDataBase();
-            
-            string album = "12345";
-            string password = "123";
+
+            string album = GetUserAlbumNumber();
+            string password = GetUserPassword();
 
             foreach (var lecturer in lecturers)
             {
@@ -71,6 +70,34 @@ namespace Problem.StudentDataBase.UserLogIn
 
         }
 
+        private string GetUserAlbumNumber()
+        {
+            Console.Write("Enter your album number: ");
+            string? album = Console.ReadLine();
+
+            if (!string.IsNullOrWhiteSpace(album))
+            {
+                return album;
+            }
+            else
+            {
+                throw new ArgumentException("Invalid album number");
+            }
+        }
+        private string GetUserPassword()
+        {
+            Console.Write("Enter your password: ");
+            string? password = Console.ReadLine();
+
+            if (!string.IsNullOrWhiteSpace(password))
+            {
+                return password;
+            }
+            else
+            {
+                throw new ArgumentException("Invalid album number");
+            }
+        }
         private Lecturer? FindLecturerByAlbumNumber(string albumNumber)
         {
             var lecturers = GetLecturerDataBase();
@@ -78,17 +105,17 @@ namespace Problem.StudentDataBase.UserLogIn
         }
         private List<Lecturer> GetLecturerDataBase()
         {
-            return JSONSerializer.DeserializeData<List<Lecturer>>();
+            return JSONSerializer.DeserializeData<List<Lecturer>>("Lecturers.json");
         }
         private void ShowUserInfo(Lecturer lecturer)
         {
             Console.WriteLine($"Name: {lecturer.Name}");
             Console.WriteLine($"Last name: {lecturer.LastName}");
             Console.WriteLine($"Sex: {lecturer.Sex}");
-            Console.WriteLine($"Pessel {lecturer.PesselNumber}");
-            Console.WriteLine($"Album number {lecturer.AlbumNumber}");
-            Console.WriteLine($"Address {lecturer.Address}");
-            Console.WriteLine($"Address {lecturer.Specialization}");
+            Console.WriteLine($"Pessel: {lecturer.PesselNumber}");
+            Console.WriteLine($"Album number: {lecturer.AlbumNumber}");
+            Console.WriteLine($"Address: {lecturer.Address}");
+            Console.WriteLine($"Specialization: {lecturer.Specialization}");
         }
     }
 }
