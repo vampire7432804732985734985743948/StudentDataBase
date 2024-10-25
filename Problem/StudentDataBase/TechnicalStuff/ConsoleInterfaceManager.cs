@@ -21,5 +21,10 @@ namespace Problem.StudentDataBase.TechnicalStuff
                 Console.WriteLine("Data were corrupted", ConsoleColor.Green);
             }
         }
+        public static void CentralizeText(string text)
+        {
+            Console.SetCursorPosition((Console.WindowWidth - text.Length) / 2, Console.CursorTop);
+            Console.WriteLine(text);
+        }
     }
 }
