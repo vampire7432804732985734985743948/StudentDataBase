@@ -1,32 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using Problem.StudentDataBase.DataContainer;
+using Problem.StudentDataBase.TechnicalStuff;
 
 namespace Problem.StudentDataBase
 {
     internal class StudentDataBase
     {
-
         private List<Student> _students = new List<Student>();
 
-        public void AddStudent()
-        {
-            var student = AddStudentData();
-
-            _students.Add(new Student
-            (
-                name: student.name,
-                lastName: student.lastName,
-                sex: student.sex,
-                pesselNumber: student.pesselNumber,
-                albumNumber: student.albumNumber,
-                address: student.address
-            ));
-        }
-
-        private (string? name, string? lastName, string? sex, string? pesselNumber, string? albumNumber, string? address) AddStudentData()
+        private (string? name, string? lastName, string? sex, string? pesselNumber, string? albumNumber, string? password, string? address, string? fieldOfStudy) AddStudentData()
         {
             Console.Write("Name:");
             string? name = Console.ReadLine();
@@ -38,13 +22,33 @@ namespace Problem.StudentDataBase
             string? pesselNumber = Console.ReadLine();
             Console.Write("Album number: ");
             string? albumNumber = Console.ReadLine();
-            Console.Write("Address: ");
+            Console.WriteLine("Password: ");
+            string password = PasswordHasher.HashPassword(Console.ReadLine());
+            Console.WriteLine("Address: ");
             string? address = Console.ReadLine();
-            return (name, lastName, sex, pesselNumber, albumNumber, address);
+            Console.Write("Field of study: ");
+            string? fieldOfStudy = Console.ReadLine();
+            return (name, lastName, sex, pesselNumber, albumNumber, password, address, fieldOfStudy);
+        }
+        public void AddStudent()
+        {
+            var student = AddStudentData();
+
+            _students.Add(new Student
+            (
+                name: student.name,
+                lastName: student.lastName,
+                sex: student.sex,
+                pesselNumber: student.pesselNumber,
+                albumNumber: student.albumNumber,
+                password: student.password,
+                address: student.address,
+                fieldOfStudy: student.fieldOfStudy
+            ));
         }
         public void SaveAllData()
         {
-            JSONSerializer.SaveAllData(JSONSerializer.SerializeData(_students));
+            JSONSerializer.SaveAllData(_students);
         }
         public void ShowAllStudents()
         {
@@ -56,7 +60,6 @@ namespace Problem.StudentDataBase
                 Console.WriteLine($"Pessel {student.PesselNumber}");
                 Console.WriteLine($"Album number {student.AlbumNumber}");
                 Console.WriteLine($"Address {student.Address}");
-
             }
         }
         public Student FindStudentByPessel(string pesselNumber)
@@ -68,7 +71,7 @@ namespace Problem.StudentDataBase
                     return student;
                 }
             }
-            return new Student(default);
+            return new Student(default, default, default, default, default,default,default, default);
         }
         public List<Student> FindStudentByLastName(string lastName)
         {
@@ -100,6 +103,5 @@ namespace Problem.StudentDataBase
                 }
             }
         }
-
     }
 }

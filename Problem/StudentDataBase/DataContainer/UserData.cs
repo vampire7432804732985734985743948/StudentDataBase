@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Problem.StudentDataBase
+namespace Problem.StudentDataBase.DataContainer
 {
-    internal class Student
+    internal abstract class UserData
     {
-        public string FieldOfStudy { get; private set; }
-        public string? Name { get; private set; }
-        public string? LastName { get; private set; }
-        public string? Address { get; private set; }
+        public string? Role { get; set; }
+        public string? Name { get; set; }
+        public string? LastName { get; set; }
+        public string? Address { get; set; }
         private const int NUMBER_OF_DIGITS_PESSEL = 11;
         private const int NUMBER_OF_DIGITS_ALBUM_NUMBER = 5;
 
@@ -20,7 +20,7 @@ namespace Problem.StudentDataBase
         public string AlbumNumber
         {
             get { return _albumNumber; }
-            private set
+            set
             {
                 if (value.Length != NUMBER_OF_DIGITS_ALBUM_NUMBER)
                 {
@@ -47,26 +47,17 @@ namespace Problem.StudentDataBase
             {
                 if (value.Length != NUMBER_OF_DIGITS_PESSEL || value == null)
                 {
-                    _pesselNumber =  "Unknown";
+                    _pesselNumber = "Unknown";
                 }
                 else
                 {
-                    _pesselNumber = value; 
+                    _pesselNumber = value;
                 }
             }
         }
 
-        public string? Sex { get; private set; }
-
-        public Student(string? name = "Unknown", string? lastName = "Unknown", string? sex = "Unknown", string? pesselNumber = "Unknown", string? albumNumber = "Unknown", string FieldOfStydy = "Unknown", string? address = "Unknown")
-        {
-            Name = name ?? "Unknown";
-            LastName = lastName ?? "Unknown";
-            Sex = sex ?? "Unknown";
-            PesselNumber = pesselNumber ?? "Unknown";
-            AlbumNumber = albumNumber ?? "Unknown";
-            Address = address ?? "Unknown";
-            FieldOfStudy = FieldOfStydy ?? "Unknown";
-        }
+        public string? Sex { get; set; }
+        public string? Password { get; set; }
+        public abstract void ShowInfo();
     }
 }

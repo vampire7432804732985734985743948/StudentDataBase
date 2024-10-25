@@ -1,9 +1,6 @@
 ﻿using System;
 using Problem.StudentDataBase;
+using Problem.StudentDataBase.UserLogIn;
 
-StudentDataBase student = new StudentDataBase();
-
-student.AddStudent();
-Console.WriteLine("_________________");
-student.ShowAllStudents();
-student.SaveAllData();
+User user = new User();
+user.CreateUserInterface();
