@@ -31,16 +31,15 @@ namespace Problem.StudentDataBase.UserLogIn
             Lecturer? selectedLecturer = null;
             List<Lecturer> lecturers = GetLecturerDataBase();
             
-            string album = "54321";
-            string password = "321";
+            string album = "12345";
+            string password = "123";
 
             foreach (var lecturer in lecturers)
             {
                 if (!string.IsNullOrWhiteSpace(lecturer.AlbumNumber) && !string.IsNullOrWhiteSpace(lecturer.Password))
                 {
-                    if (IsLoginAccepted(album, password))
+                    if (lecturer.AlbumNumber == album && IsLoginAccepted(album, password))
                     {
-                        Console.WriteLine(lecturer.Name + " fksdl;k");
                         selectedLecturer = lecturer;
                         break;
                     }
@@ -49,7 +48,7 @@ namespace Problem.StudentDataBase.UserLogIn
 
             if (selectedLecturer != null)
             {
-                // ShowUserInfo(selectedLecturer);
+                ShowUserInfo(selectedLecturer);
             }
             else
             {
