@@ -36,9 +36,9 @@ namespace Problem.StudentDataBase.TechnicalStuff
             }
         }
 
-        public static T DeserializeData<T>(string filePath)
+        public static T DeserializeData<T>()
         {
-            if (filePath != null && !File.Exists(filePath))
+            if (filePath != null && File.Exists(filePath))
             {
                 var jsonString = File.ReadAllText(filePath);
                 if (jsonString != null && !string.IsNullOrEmpty(jsonString))

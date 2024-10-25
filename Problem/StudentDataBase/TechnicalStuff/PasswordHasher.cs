@@ -5,45 +5,63 @@ namespace Problem.StudentDataBase.TechnicalStuff
 {
     internal class PasswordHasher
     {
+        private const int SaltSize = 16; 
+        private const int HashSize = 20;
+        private const int Iterations = 10000;
+
         public static string HashPassword(string password)
         {
-            if (password != null && !string.IsNullOrEmpty(password))
+            if (string.IsNullOrWhiteSpace(password))
             {
-                byte[] salt = new byte[16];
-                RandomNumberGenerator.Fill(salt);
-
-                var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 10000, HashAlgorithmName.SHA256);
-                byte[] hash = pbkdf2.GetBytes(20);
-
-                byte[] hashBytes = new byte[36];
-                Array.Copy(salt, 0, hashBytes, 0, 16);
-                Array.Copy(hash, 0, hashBytes, 16, 20);
-
-                string savedPasswordHash = Convert.ToBase64String(hashBytes);
-
-                return savedPasswordHash;
+                throw new ArgumentException("Password cannot be null or empty.", nameof(password));
             }
-            else
+
+            byte[] salt = new byte[SaltSize];
+            using (var rng = RandomNumberGenerator.Create())
             {
-                throw new ArgumentException("Password is now valid");
+                rng.GetBytes(salt);
             }
+
+            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, Iterations, HashAlgorithmName.SHA256);
+            byte[] hash = pbkdf2.GetBytes(HashSize);
+
+            byte[] hashBytes = new byte[SaltSize + HashSize];
+            Array.Copy(salt, 0, hashBytes, 0, SaltSize);
+            Array.Copy(hash, 0, hashBytes, SaltSize, HashSize);
+
+            return Convert.ToBase64String(hashBytes);
         }
+
         public static bool VerifyPassword(string enteredPassword, string storedHash)
         {
-            byte[] hashBytes = Convert.FromBase64String(storedHash);
-            byte[] salt = new byte[16];
-            Array.Copy(hashBytes, 0, salt, 0, 16);
-
-            var pbkdf2 = new Rfc2898DeriveBytes(enteredPassword, salt, 10000, HashAlgorithmName.SHA256);
-            byte[] hash = pbkdf2.GetBytes(20);
-
-            for (int i = 0; i < 20; i++)
+            if (string.IsNullOrWhiteSpace(enteredPassword))
             {
-                if (hashBytes[i + 16] != hash[i])
+                throw new ArgumentException("Password cannot be null or empty.", nameof(enteredPassword));
+            }
+
+            if (string.IsNullOrWhiteSpace(storedHash))
+            {
+                throw new ArgumentException("Stored hash cannot be null or empty.", nameof(storedHash));
+            }
+            byte[] hashBytes = Convert.FromBase64String(storedHash);
+
+            byte[] salt = new byte[SaltSize];
+            Array.Copy(hashBytes, 0, salt, 0, SaltSize);
+
+            byte[] storedHashPart = new byte[HashSize];
+            Array.Copy(hashBytes, SaltSize, storedHashPart, 0, HashSize);
+
+            var pbkdf2 = new Rfc2898DeriveBytes(enteredPassword, salt, Iterations, HashAlgorithmName.SHA256);
+            byte[] enteredPasswordHash = pbkdf2.GetBytes(HashSize);
+
+            for (int i = 0; i < HashSize; i++)
+            {
+                if (storedHashPart[i] != enteredPasswordHash[i])
                 {
                     return false;
                 }
             }
+
             return true;
         }
     }

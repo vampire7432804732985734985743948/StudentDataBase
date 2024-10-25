@@ -10,7 +10,7 @@ namespace Problem.StudentDataBase.UserLogIn
     {
         private bool IsLoginAccepted(string albumNumber, string password)
         {
-            if (!string.IsNullOrEmpty(albumNumber) && !string.IsNullOrEmpty(password))
+            if (!string.IsNullOrWhiteSpace(albumNumber) && !string.IsNullOrWhiteSpace(password))
             {
                 if (VerifyLecturerCredentials(albumNumber, password))
                 {
@@ -26,50 +26,70 @@ namespace Problem.StudentDataBase.UserLogIn
             else { return false; }
         }
 
-        public void CreateUserInterface()
+        public void SelectLecturer()
         {
-            Lecturer selectedLecturer = new Lecturer(default, default, default, default, default, default, default);
+            Lecturer? selectedLecturer = null;
             List<Lecturer> lecturers = GetLecturerDataBase();
+            
+            string album = "54321";
+            string password = "321";
+
             foreach (var lecturer in lecturers)
             {
-                if (!string.IsNullOrEmpty(lecturer.AlbumNumber) && !string.IsNullOrEmpty(lecturer.Password))
+                if (!string.IsNullOrWhiteSpace(lecturer.AlbumNumber) && !string.IsNullOrWhiteSpace(lecturer.Password))
                 {
-                    if (IsLoginAccepted(lecturer.AlbumNumber, lecturer.Password))
+                    if (IsLoginAccepted(album, password))
                     {
+                        Console.WriteLine(lecturer.Name + " fksdl;k");
                         selectedLecturer = lecturer;
                         break;
                     }
                 }
             }
+
             if (selectedLecturer != null)
             {
-                Console.WriteLine(selectedLecturer.Name);
+                // ShowUserInfo(selectedLecturer);
             }
             else
             {
-                ConsoleInterfaceManager.DrawColoredText("Login failed: Invalid album number or password!", ConsoleColor.Red);
+                ConsoleInterfaceManager.DrawColoredText("Not a single datum is here", ConsoleColor.Red);
             }
         }
         private bool VerifyLecturerCredentials(string albumNumber, string enteredPassword)
         {
             var lecturer = FindLecturerByAlbumNumber(albumNumber);
 
-            if (lecturer == null || string.IsNullOrEmpty(lecturer.Password))
+            if (lecturer == null || string.IsNullOrWhiteSpace(lecturer.Password))
             {
                 Console.WriteLine("Lecturer not found.");
                 return false;
             }
+            else
+            {
+                return PasswordHasher.VerifyPassword(enteredPassword, lecturer.Password);
+            }
 
-            return PasswordHasher.VerifyPassword(enteredPassword, lecturer.Password);
         }
+
         private Lecturer? FindLecturerByAlbumNumber(string albumNumber)
         {
             var lecturers = GetLecturerDataBase();
-            return lecturers.FirstOrDefault(l => l.AlbumNumber == albumNumber);
+            return lecturers.FirstOrDefault(lecturer => lecturer.AlbumNumber == albumNumber);
         }
         private List<Lecturer> GetLecturerDataBase()
         {
-            return JSONSerializer.DeserializeData<List<Lecturer>>(JSONSerializer.filePath);
+            return JSONSerializer.DeserializeData<List<Lecturer>>();
+        }
+        private void ShowUserInfo(Lecturer lecturer)
+        {
+            Console.WriteLine($"Name: {lecturer.Name}");
+            Console.WriteLine($"Last name: {lecturer.LastName}");
+            Console.WriteLine($"Sex: {lecturer.Sex}");
+            Console.WriteLine($"Pessel {lecturer.PesselNumber}");
+            Console.WriteLine($"Album number {lecturer.AlbumNumber}");
+            Console.WriteLine($"Address {lecturer.Address}");
+            Console.WriteLine($"Address {lecturer.Specialization}");
         }
     }
 }
