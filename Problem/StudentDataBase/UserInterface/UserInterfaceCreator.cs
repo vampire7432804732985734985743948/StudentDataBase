@@ -17,7 +17,7 @@ namespace Problem.StudentDataBase.UserInterface
         public void CreateUserInterface()
         {
             _user.SelectLecturer();
-
+            
             while (true)
             {
                 ShowNavigation();
@@ -34,8 +34,9 @@ namespace Problem.StudentDataBase.UserInterface
             Console.WriteLine("4 = Sort students by first name");
             Console.WriteLine("5 = Sort students by last name");
             Console.WriteLine("6 = Find student by pessel number");
-            Console.WriteLine("7 = Save data");
-            Console.WriteLine("8 = Clear console");
+            Console.WriteLine("7 = Find all students by last name");
+            Console.WriteLine("8 = Save data");
+            Console.WriteLine("9 = Clear console");
         }
 
         private void InputCommand()
@@ -59,22 +60,36 @@ namespace Problem.StudentDataBase.UserInterface
                     break;
 
                 case ConsoleKey.D4:
-                    _studentDataBase.SortByFirstName();
+                    _studentDataBase.ShowAllStudents(_studentDataBase.SortByFirstName());
                     break;
 
                 case ConsoleKey.D5:
-                    _studentDataBase.SortByLastName();
+
+                    _studentDataBase.ShowAllStudents(_studentDataBase.SortByLastName());
                     break;
 
                 case ConsoleKey.D6:
                     Console.Write("Enter student pessel number: ");
-                    int pesselNumber = Convert.ToInt32(Console.ReadLine());
-                    _studentDataBase.FindStudentByPessel(pesselNumber.ToString());
+                    long pesselNumber = Convert.ToInt64(Console.ReadLine());
+                    _studentDataBase.ShowStudentData(_studentDataBase.FindStudentByPessel(pesselNumber.ToString()));
+                    
                     break;
                 case ConsoleKey.D7:
-                    _studentDataBase.SaveAllData();
+                    Console.Write("Enter student last name: ");
+                    string? studentLastName = !string.IsNullOrWhiteSpace(Console.ReadLine()) ? this.ToString() : "Unknown";
+                    if (!string.IsNullOrWhiteSpace(studentLastName))
+                    {
+                        _studentDataBase.ShowAllStudents(_studentDataBase.FindStudentsByLastName(studentLastName));
+                    }
+                    else
+                    {
+                        ConsoleInterfaceManager.DrawColoredText("Enter a valid data", ConsoleColor.Red);
+                    }
                     break;
                 case ConsoleKey.D8:
+                    _studentDataBase.SaveAllData();
+                    break;
+                case ConsoleKey.D9:
                     Console.Clear();
                     break;
                 default:

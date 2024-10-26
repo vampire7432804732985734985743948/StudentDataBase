@@ -8,8 +8,12 @@ namespace Problem.StudentDataBase
 {
     internal class StudentDataBase
     {
-        private List<Student> _students = new List<Student>();
+        private List<Student>? _students = null;
 
+        public StudentDataBase()
+        {
+            _students = JSONSerializer.DeserializeData<List<Student>>("JSONStudentDataBase.json");
+        }
         private (string? name, string? lastName, string? sex, string? pesselNumber, string? albumNumber, string? password, string? address, string? fieldOfStudy) AddStudentData()
         {
             Console.Write("Name:");
@@ -23,7 +27,8 @@ namespace Problem.StudentDataBase
             Console.Write("Album number: ");
             string? albumNumber = Console.ReadLine();
             Console.WriteLine("Password: ");
-            string password = PasswordHasher.HashPassword(Console.ReadLine());
+            string password = PasswordHasher.HashPassword(EnterObligateData());
+
             Console.WriteLine("Address: ");
             string? address = Console.ReadLine();
             Console.Write("Field of study: ");
@@ -32,6 +37,10 @@ namespace Problem.StudentDataBase
         }
         public void AddStudent()
         {
+            if (_students == null)
+            {
+                _students = JSONSerializer.DeserializeData<List<Student>>("JSONStudentDataBase.json");
+            }
             var student = AddStudentData();
 
             _students.Add(new Student
@@ -50,57 +59,162 @@ namespace Problem.StudentDataBase
         {
             JSONSerializer.SaveAllData(_students);
         }
+        public void ShowStudentData(Student student)
+        {
+            Console.WriteLine("----------------------------------");
+            Console.WriteLine($"Name: {student.Name}");
+            Console.WriteLine($"Last name: {student.LastName}");
+            Console.WriteLine($"Sex: {student.Sex}");
+            Console.WriteLine($"Pessel {student.PesselNumber}");
+            Console.WriteLine($"Album number {student.AlbumNumber}");
+            Console.WriteLine($"Address {student.Address}");
+        }
         public void ShowAllStudents()
         {
-            foreach (var student in _students)
+            if (_students != null)
             {
-                Console.WriteLine($"Name: {student.Name}");
-                Console.WriteLine($"Last name: {student.LastName}");
-                Console.WriteLine($"Sex: {student.Sex}");
-                Console.WriteLine($"Pessel {student.PesselNumber}");
-                Console.WriteLine($"Album number {student.AlbumNumber}");
-                Console.WriteLine($"Address {student.Address}");
+                foreach (var student in _students)
+                {
+                    ShowStudentData(student);
+                }
+            }
+            else
+            {
+                ConsoleInterfaceManager.DrawColoredText("There are no students!", ConsoleColor.Red);
             }
         }
+        public void ShowAllStudents(List<Student> students)
+        {
+            if (students != null)
+            {
+                foreach (var student in students)
+                {
+                    ShowStudentData(student);
+                }
+            }
+            else
+            {
+                ConsoleInterfaceManager.DrawColoredText("Database  is empty",  ConsoleColor.Red);
+            }
+        }
+        private string EnterObligateData()
+        {
+            string? data;
+
+            do
+            {
+                data = Console.ReadLine();
+
+                if (string.IsNullOrWhiteSpace(data))
+                {
+                    Console.WriteLine("Input cannot be empty. Please enter a valid value:");
+                }
+
+            } while (string.IsNullOrWhiteSpace(data));
+
+            return data;
+        }
+
         public Student FindStudentByPessel(string pesselNumber)
         {
-            foreach (var student in _students)
+            Student? selectedStudent = null;
+            if (_students != null)
             {
-                if (student.PesselNumber == pesselNumber)
+                foreach (var student in _students)
                 {
-                    return student;
+                    if (student.PesselNumber == pesselNumber)
+                    {
+                        selectedStudent = student;
+                    }
+                }
+
+                if (selectedStudent != null)
+                {
+                    return selectedStudent;
+                }
+                else
+                {
+                    ConsoleInterfaceManager.DrawColoredText("There is no such student here", ConsoleColor.Red);
+                    return new Student(default, default, default, default, default, default, default, default);
                 }
             }
-            return new Student(default, default, default, default, default, default, default, default);
+            else
+            {
+                ConsoleInterfaceManager.DrawColoredText("There are no students!", ConsoleColor.Red);
+                return new Student(default, default, default, default, default, default, default, default);
+            }
         }
-        public List<Student> FindStudentByLastName(string lastName)
+        public List<Student> FindStudentsByLastName(string lastName)
         {
             List<Student> students = new List<Student>();
-            foreach (var student in _students)
+
+            if (_students != null && _students.Count >= 0)
             {
-                if (student.LastName == lastName)
+                foreach (var student in _students)
                 {
-                    students.Add(student);
+                    if (student.LastName == lastName)
+                    {
+                        Console.WriteLine(student.Name);
+                        students.Add(student);
+                    }
+                }
+                if (students.Count <= 0)
+                {
+                    ConsoleInterfaceManager.DrawColoredText("There are no such students here", ConsoleColor.Red);
+                    return new List<Student>();
+                }
+                else
+                {
+                    return students;      
                 }
             }
-            return students;
+            else
+            {
+                ConsoleInterfaceManager.DrawColoredText("The database is empty", ConsoleColor.Red);
+                return new List<Student>();
+            }
         }
+
         public List<Student> SortByLastName()
         {
-            return _students.OrderByDescending(student => student.LastName).ToList();
+            if (_students != null)
+            {
+                return _students.OrderBy(student => student.LastName).ToList();
+            }
+            else
+            {
+                return new List<Student>();
+            }
         }
         public List<Student> SortByFirstName()
         {
-            return _students.OrderByDescending(student => student.Name).ToList();
+            if (_students != null)
+            {
+                return _students.OrderBy(student => student.Name).ToList();
+            }
+            else
+            {
+                return new List<Student>();
+            }
         }
         public void DeleteStudentById(string albumNumber)
         {
-            foreach (var student in _students)
+            if (_students != null)
             {
-                if (student.AlbumNumber == albumNumber)
+                foreach (var student in _students)
                 {
-                    _students.Remove(student);
+                    if (student.AlbumNumber == albumNumber)
+                    {
+                        _students.Remove(student);
+                        return;
+                    }
                 }
+                ConsoleInterfaceManager.DrawColoredText("There is no  such student", ConsoleColor.Red);
+                return;
+            }
+            else
+            {
+                ConsoleInterfaceManager.DrawColoredText("The database is empty", ConsoleColor.Red);
             }
         }
     }

@@ -44,7 +44,6 @@ namespace Problem.StudentDataBase.UserLogIn
                     }
                 }
             }
-
             if (selectedLecturer != null)
             {
                 ShowUserInfo(selectedLecturer);
@@ -52,6 +51,7 @@ namespace Problem.StudentDataBase.UserLogIn
             else
             {
                 ConsoleInterfaceManager.DrawColoredText("Not a single datum is here", ConsoleColor.Red);
+                SelectLecturer();
             }
         }
         private bool VerifyLecturerCredentials(string albumNumber, string enteredPassword)
