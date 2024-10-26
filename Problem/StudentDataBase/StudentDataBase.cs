@@ -117,18 +117,20 @@ namespace Problem.StudentDataBase
 
         public Student FindStudentByPessel(string pesselNumber)
         {
-            Student? selectedStudent = null;
-            if (_students != null)
+            Student? selectedStudent = new Student(default, default, default, default, default, default, default, default);
+            if (_students != null && _students.Count > 0)
             {
                 foreach (var student in _students)
                 {
                     if (student.PesselNumber == pesselNumber)
                     {
+
+                        Console.WriteLine(student.Name + student.PesselNumber);
                         selectedStudent = student;
                     }
                 }
 
-                if (selectedStudent != null)
+                if (selectedStudent.PesselNumber != null)
                 {
                     return selectedStudent;
                 }
@@ -140,7 +142,7 @@ namespace Problem.StudentDataBase
             }
             else
             {
-                ConsoleInterfaceManager.DrawColoredText("There are no students!", ConsoleColor.Red);
+                ConsoleInterfaceManager.DrawColoredText("Database is empty", ConsoleColor.Red);
                 return new Student(default, default, default, default, default, default, default, default);
             }
         }
@@ -148,13 +150,13 @@ namespace Problem.StudentDataBase
         {
             List<Student> students = new List<Student>();
 
-            if (_students != null && _students.Count >= 0)
+            if (_students != null && _students.Count > 0)
             {
                 foreach (var student in _students)
                 {
+                        Console.WriteLine(student.Name);
                     if (student.LastName == lastName)
                     {
-                        Console.WriteLine(student.Name);
                         students.Add(student);
                     }
                 }
