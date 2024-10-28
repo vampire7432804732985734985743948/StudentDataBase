@@ -33,12 +33,11 @@ namespace Problem.StudentDataBase.UserInterface
             Console.WriteLine("3 = Show list of students");
             Console.WriteLine("4 = Sort students by first name");
             Console.WriteLine("5 = Sort students by last name");
-            Console.WriteLine("6 = Find student by pessel number");
+            Console.WriteLine("6 = Find student by album number");
             Console.WriteLine("7 = Find all students by last name");
             Console.WriteLine("8 = Save data");
             Console.WriteLine("9 = Clear console");
         }
-
         private void InputCommand()
         {
             var key = Console.ReadKey().Key;
@@ -69,9 +68,9 @@ namespace Problem.StudentDataBase.UserInterface
                     break;
 
                 case ConsoleKey.D6:
-                    Console.Write("Enter student pessel number: ");
-                    long pesselNumber = Convert.ToInt64(Console.ReadLine());
-                    _studentDataBase.ShowStudentData(_studentDataBase.FindStudentByPessel(pesselNumber.ToString()));
+                    Console.Write("Enter student album number: ");
+                    long idNumber = Convert.ToInt64(Console.ReadLine());
+                    _studentDataBase.ShowStudentData(_studentDataBase.FindStudentByAlbumNumber(idNumber.ToString()));
                     
                     break;
                 case ConsoleKey.D7:

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using Problem.StudentDataBase.Courses;
 using Problem.StudentDataBase.DataContainer;
 using Problem.StudentDataBase.TechnicalStuff;
 
@@ -9,6 +10,24 @@ namespace Problem.StudentDataBase
     internal class StudentDataBase
     {
         private List<Student>? _students = null;
+        private int _numberOfSubjects;
+
+        public int NumberOfSubjects
+        {
+            get { return _numberOfSubjects; }
+            private set
+            {
+                if (value > 0)
+                {
+                    _numberOfSubjects = value;
+                }
+                else
+                {
+                    ConsoleInterfaceManager.DrawColoredText("Invalid data", ConsoleColor.Red);
+                    _numberOfSubjects = 1;
+                }
+            }
+        }
 
         public StudentDataBase()
         {
@@ -115,14 +134,19 @@ namespace Problem.StudentDataBase
             return data;
         }
 
-        public Student FindStudentByPessel(string pesselNumber)
+        public Student FindStudentByAlbumNumber(string albumNumber)
         {
             Student? selectedStudent = new Student(default, default, default, default, default, default, default, default);
             if (_students != null && _students.Count > 0)
             {
+                if (albumNumber.Length != UserData.NUMBER_OF_DIGITS_ALBUM_NUMBER)
+                {
+                    ConsoleInterfaceManager.DrawColoredText("Invalid input", ConsoleColor.Red);
+                    return selectedStudent;
+                }
                 foreach (var student in _students)
                 {
-                    if (student.PesselNumber == pesselNumber)
+                    if (student.AlbumNumber == albumNumber)
                     {
 
                         Console.WriteLine(student.Name + student.PesselNumber);
@@ -146,6 +170,29 @@ namespace Problem.StudentDataBase
                 return new Student(default, default, default, default, default, default, default, default);
             }
         }
+
+        public void AddSubjectToStudentCourse(Subject subject, string albumNumber)
+        {
+            Student selectedStudent = FindStudentByAlbumNumber(albumNumber);
+
+            selectedStudent.AddSubject(subject);
+        }
+        /*public Subject CreateSubject()
+        {
+            Console.Write("Enter a name of subject:");
+            Subject subject = new Subject();
+            string? nameOfSubject = Console.ReadLine();
+            int grade = 0;
+                    
+            Console.Write("Enter grade:");
+            grade = Convert.ToInt32(Console.ReadLine());
+            if (!string.IsNullOrWhiteSpace(nameOfSubject))
+            {
+                subject.NameOfSubject = nameOfSubject;
+            }
+            subject.Grade = grade;
+            return subject;
+        }*/
         public List<Student> FindStudentsByLastName(string lastName)
         {
             List<Student> students = new List<Student>();
@@ -154,7 +201,7 @@ namespace Problem.StudentDataBase
             {
                 foreach (var student in _students)
                 {
-                        Console.WriteLine(student.Name);
+                    Console.WriteLine(student.Name);
                     if (student.LastName == lastName)
                     {
                         students.Add(student);

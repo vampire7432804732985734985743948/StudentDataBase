@@ -8,21 +8,21 @@ namespace Problem.StudentDataBase.DataContainer
 {
     internal abstract class UserData
     {
-        public string? Role { get; set; }
-        public string? Name { get; set; }
-        public string? LastName { get; set; }
-        public string? Address { get; set; }
-        private const int NUMBER_OF_DIGITS_PESSEL = 11;
-        private const int NUMBER_OF_DIGITS_ALBUM_NUMBER = 5;
+        public string? Role { get; protected set; }
+        public string? Name { get; protected set; }
+        public string? LastName { get; protected set; }
+        public string? Address { get; protected set; }
+        public const int NUMBER_OF_DIGITS_PESSEL = 11;
+        public const int NUMBER_OF_DIGITS_ALBUM_NUMBER = 5;
 
         private string? _albumNumber;
 
         public string AlbumNumber
         {
-            get { return _albumNumber; }
+            get { return _albumNumber ?? "Unknown"; }
             set
             {
-                if (value.Length != NUMBER_OF_DIGITS_ALBUM_NUMBER)
+                if (value.Length != NUMBER_OF_DIGITS_ALBUM_NUMBER || string.IsNullOrWhiteSpace(value))
                 {
                     _albumNumber = "Unknown";
                 }
