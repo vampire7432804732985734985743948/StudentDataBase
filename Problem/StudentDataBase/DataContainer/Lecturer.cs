@@ -27,16 +27,5 @@ namespace Problem.StudentDataBase.DataContainer
             Address = address ?? "Unknown";
             Specialization = specialization ?? "Unknown";
         }
-
-        public override void ShowInfo()
-        {
-            Console.WriteLine($"Name: {this.Name}");
-            Console.WriteLine($"Last name: {this.LastName}");
-            Console.WriteLine($"Sex: {this.Sex}");
-            Console.WriteLine($"Pessel {this.PesselNumber}");
-            Console.WriteLine($"Album number {this.AlbumNumber}");
-            Console.WriteLine($"Address {this.Address}");
-            Console.WriteLine($"Address {this.Specialization}");
-        }
     }
 }

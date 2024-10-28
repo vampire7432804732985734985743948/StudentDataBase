@@ -1,5 +1,6 @@
 ﻿using System;
 using Problem.StudentDataBase;
+using Problem.StudentDataBase.Courses;
 using Problem.StudentDataBase.TechnicalStuff;
 using Problem.StudentDataBase.UserInterface;
 using Problem.StudentDataBase.UserLogIn;

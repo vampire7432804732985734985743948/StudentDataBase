@@ -33,7 +33,7 @@ namespace Problem.StudentDataBase
         {
             _students = JSONSerializer.DeserializeData<List<Student>>("JSONStudentDataBase.json");
         }
-        private (string? name, string? lastName, string? sex, string? pesselNumber, string? albumNumber, string? password, string? address, string? fieldOfStudy) AddStudentData()
+        private (string? name, string? lastName, string? sex, string? pesselNumber, string? albumNumber, string? password, string? address, Course? fieldOfStudy) AddStudentData()
         {
             Console.Write("Name:");
             string? name = Console.ReadLine();
@@ -47,16 +47,17 @@ namespace Problem.StudentDataBase
             string? albumNumber = Console.ReadLine();
             Console.WriteLine("Password: ");
             string password = PasswordHasher.HashPassword(EnterObligateData());
-
             Console.WriteLine("Address: ");
             string? address = Console.ReadLine();
             Console.Write("Field of study: ");
             string? fieldOfStudy = Console.ReadLine();
-            return (name, lastName, sex, pesselNumber, albumNumber, password, address, fieldOfStudy);
+            Course course = CoursesFactory.CreateCourse(fieldOfStudy);
+
+            return (name, lastName, sex, pesselNumber, albumNumber, password, address, course);
         }
         public void AddStudent()
         {
-            if (_students == null)
+            if (_students == null )
             {
                 _students = JSONSerializer.DeserializeData<List<Student>>("JSONStudentDataBase.json");
             }
@@ -87,6 +88,7 @@ namespace Problem.StudentDataBase
             Console.WriteLine($"Pessel {student.PesselNumber}");
             Console.WriteLine($"Album number {student.AlbumNumber}");
             Console.WriteLine($"Address {student.Address}");
+            
         }
         public void ShowAllStudents()
         {
@@ -133,7 +135,6 @@ namespace Problem.StudentDataBase
 
             return data;
         }
-
         public Student FindStudentByAlbumNumber(string albumNumber)
         {
             Student? selectedStudent = new Student(default, default, default, default, default, default, default, default);
@@ -170,29 +171,6 @@ namespace Problem.StudentDataBase
                 return new Student(default, default, default, default, default, default, default, default);
             }
         }
-
-        public void AddSubjectToStudentCourse(Subject subject, string albumNumber)
-        {
-            Student selectedStudent = FindStudentByAlbumNumber(albumNumber);
-
-            selectedStudent.AddSubject(subject);
-        }
-        /*public Subject CreateSubject()
-        {
-            Console.Write("Enter a name of subject:");
-            Subject subject = new Subject();
-            string? nameOfSubject = Console.ReadLine();
-            int grade = 0;
-                    
-            Console.Write("Enter grade:");
-            grade = Convert.ToInt32(Console.ReadLine());
-            if (!string.IsNullOrWhiteSpace(nameOfSubject))
-            {
-                subject.NameOfSubject = nameOfSubject;
-            }
-            subject.Grade = grade;
-            return subject;
-        }*/
         public List<Student> FindStudentsByLastName(string lastName)
         {
             List<Student> students = new List<Student>();
@@ -223,7 +201,6 @@ namespace Problem.StudentDataBase
                 return new List<Student>();
             }
         }
-
         public List<Student> SortByLastName()
         {
             if (_students != null)

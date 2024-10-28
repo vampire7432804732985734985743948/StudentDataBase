@@ -61,6 +61,7 @@ namespace Problem.StudentDataBase.Courses
         public Subject(string nameOfSubject)
         {
             NameOfSubject = nameOfSubject;
+            _attendancePercentage = GeneratePercentageOfAttendance();
         }
     }
 }

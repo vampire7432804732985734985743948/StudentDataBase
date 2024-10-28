@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 
 namespace Problem.StudentDataBase.Courses
 {
-    public abstract class Course
+    internal class Course
     {
-        public string Name { get; protected set; }
-
-        // Change this to internal if Subject is internal
+        public string CourseName { get; protected set; }
         internal List<Subject> Subjects { get; set; } = new List<Subject>();
-
         public Course(string name)
         {
-            Name = name;
+            CourseName = name;
             SetSubjects();
         }
 
-        protected abstract void SetSubjects();
+        protected virtual void SetSubjects()
+        {
+
+        }
     }
 }

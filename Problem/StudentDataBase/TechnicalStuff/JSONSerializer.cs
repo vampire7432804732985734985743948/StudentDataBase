@@ -2,6 +2,8 @@
 using System.IO;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
+using Problem.StudentDataBase.Courses;
 
 namespace Problem.StudentDataBase.TechnicalStuff
 {
@@ -39,20 +41,37 @@ namespace Problem.StudentDataBase.TechnicalStuff
 
         public static T DeserializeData<T>(string readingFileName)
         {
+            // Assuming folderPath is defined somewhere in your class
             string readingFilePath = Path.Combine(folderPath, readingFileName);
 
-            if (readingFilePath != null && File.Exists(readingFilePath))
+            if (string.IsNullOrEmpty(readingFilePath) || !File.Exists(readingFilePath))
             {
-                var jsonString = File.ReadAllText(readingFilePath);
-                if (jsonString != null && !string.IsNullOrEmpty(jsonString))
-                    return JsonSerializer.Deserialize<T>(jsonString);
-                else
-                    throw new ArgumentException("File is empty");
+                throw new ArgumentException("There is no such file or directory");
             }
-            else
+
+            // Read the file content
+            string jsonString = File.ReadAllText(readingFilePath);
+
+            if (string.IsNullOrWhiteSpace(jsonString))
             {
-                throw new ArgumentException("There is no such directory");
+                throw new ArgumentException("File is empty");
+            }
+
+            try
+            {
+                // Deserialize the JSON data with options
+                return JsonSerializer.Deserialize<T>(jsonString, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true, // Allows case-insensitive property matching
+                    Converters = { new CourseClassConverter() } // Add your custom converters
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred during deserialization: {ex.Message}");
+                throw; // Re-throwing to allow upper layers to handle it
             }
         }
+
     }
 }

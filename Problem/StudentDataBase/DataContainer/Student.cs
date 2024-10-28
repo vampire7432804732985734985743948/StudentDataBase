@@ -9,8 +9,8 @@ namespace Problem.StudentDataBase.DataContainer
 {
     internal class Student : UserData
     {
-        public string FieldOfStudy { get; private set; }
-        private List<Subject> _subjects = new List<Subject>();
+        public Course? FieldOfStudy { get; private set; }
+        public List<Subject>? CourseSubjects { get; private set; }
 
         public Student(string? name,
                        string? lastName,
@@ -19,7 +19,7 @@ namespace Problem.StudentDataBase.DataContainer
                        string? albumNumber,
                        string? password,
                        string? address,
-                       string? fieldOfStudy)
+                       Course? fieldOfStudy)
         {
             Role = "Student";
             Name = name ?? "Unknown";
@@ -29,17 +29,16 @@ namespace Problem.StudentDataBase.DataContainer
             AlbumNumber = albumNumber ?? "Unknown";
             Password = password ?? "Invalid password";
             Address = address ?? "Unknown";
-            FieldOfStudy = fieldOfStudy ?? "Unknown";
+            FieldOfStudy = fieldOfStudy;
+            SetSubjectList();
         }
 
-        public override void ShowInfo()
+        private void SetSubjectList()
         {
-
-        }
-
-        public void AddSubject(Subject subject)
-        {
-            _subjects.Add(subject);
+            if (FieldOfStudy != null)
+            {
+                CourseSubjects = FieldOfStudy.Subjects;
+            }
         }
     }
 }

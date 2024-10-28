@@ -58,6 +58,5 @@ namespace Problem.StudentDataBase.DataContainer
 
         public string? Sex { get; set; }
         public string? Password { get; set; }
-        public abstract void ShowInfo();
     }
 }

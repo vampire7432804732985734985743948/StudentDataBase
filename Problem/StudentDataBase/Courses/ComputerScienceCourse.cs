@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Problem.StudentDataBase.Courses
 {
-    public class ComputerScienceCourse : Course
+    internal class ComputerScienceCourse : Course
     {
         public ComputerScienceCourse() : base("Computer Science") { }
 
