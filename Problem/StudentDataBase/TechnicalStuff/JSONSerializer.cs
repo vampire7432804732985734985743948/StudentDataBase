@@ -41,7 +41,6 @@ namespace Problem.StudentDataBase.TechnicalStuff
 
         public static T DeserializeData<T>(string readingFileName)
         {
-            // Assuming folderPath is defined somewhere in your class
             string readingFilePath = Path.Combine(folderPath, readingFileName);
 
             if (string.IsNullOrEmpty(readingFilePath) || !File.Exists(readingFilePath))
@@ -49,7 +48,6 @@ namespace Problem.StudentDataBase.TechnicalStuff
                 throw new ArgumentException("There is no such file or directory");
             }
 
-            // Read the file content
             string jsonString = File.ReadAllText(readingFilePath);
 
             if (string.IsNullOrWhiteSpace(jsonString))
@@ -59,17 +57,16 @@ namespace Problem.StudentDataBase.TechnicalStuff
 
             try
             {
-                // Deserialize the JSON data with options
                 return JsonSerializer.Deserialize<T>(jsonString, new JsonSerializerOptions
                 {
-                    PropertyNameCaseInsensitive = true, // Allows case-insensitive property matching
-                    Converters = { new CourseClassConverter() } // Add your custom converters
+                    PropertyNameCaseInsensitive = true, 
+                    Converters = { new CourseClassConverter() }
                 });
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred during deserialization: {ex.Message}");
-                throw; // Re-throwing to allow upper layers to handle it
+                ConsoleInterfaceManager.DrawColoredText($"An error occurred during deserialization: {ex.Message}", ConsoleColor.Red);
+                throw;
             }
         }
 

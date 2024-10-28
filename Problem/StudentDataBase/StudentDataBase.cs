@@ -243,5 +243,38 @@ namespace Problem.StudentDataBase
                 ConsoleInterfaceManager.DrawColoredText("The database is empty", ConsoleColor.Red);
             }
         }
+
+        /*public Subject FindSubjectByName(string subjectName)
+        {
+            Subject subject;
+            if (!string.IsNullOrWhiteSpace(subjectName))
+            {
+                ConsoleInterfaceManager.DrawColoredText("Invalid data", ConsoleColor.Red);
+                return new Subject("Unknown");
+            }
+            if (_students != null && _students.Count > 0)
+            {
+                foreach (var student in _students)
+                {
+                    if (student.FieldOfStudy.Subjects.Contains(new Subject(subjectName)))
+                    {
+                        subject = new Subject(subjectName);
+                    }
+                }
+
+            }
+            else
+            {
+                ConsoleInterfaceManager.DrawColoredText("Database is empty", ConsoleColor.Red);
+                return new Subject("Unknown");
+            }
+        }*/
+        public void UpdateStudentGrade(string subject, int grade)
+        {
+            if (!string.IsNullOrEmpty(subject))
+            {
+
+            }
+        }
     }
 }

@@ -13,9 +13,9 @@ namespace Problem.StudentDataBase.TechnicalStuff
     {
         public override Course Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            using (JsonDocument doc = JsonDocument.ParseValue(ref reader))
+            using (JsonDocument document = JsonDocument.ParseValue(ref reader))
             {
-                var jsonObject = doc.RootElement;
+                var jsonObject = document.RootElement;
                 var fieldOfStudy = jsonObject.GetProperty("CourseName").GetString();
 
                 return fieldOfStudy?.ToLower() switch
@@ -30,7 +30,6 @@ namespace Problem.StudentDataBase.TechnicalStuff
                 };
             }
         }
-
         public override void Write(Utf8JsonWriter writer, Course value, JsonSerializerOptions options)
         {
             JsonSerializer.Serialize(writer, value, value.GetType(), options);

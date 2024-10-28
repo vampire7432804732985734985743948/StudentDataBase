@@ -35,8 +35,9 @@ namespace Problem.StudentDataBase.UserInterface
             Console.WriteLine("5 = Sort students by last name");
             Console.WriteLine("6 = Find student by album number");
             Console.WriteLine("7 = Find all students by last name");
-            Console.WriteLine("8 = Save data");
-            Console.WriteLine("9 = Clear console");
+            Console.WriteLine("8 = Find all students by last name");
+            Console.WriteLine("9 = Save data");
+            Console.WriteLine("0 = Clear console");
         }
         private void InputCommand()
         {
@@ -86,15 +87,37 @@ namespace Problem.StudentDataBase.UserInterface
                     }
                     break;
                 case ConsoleKey.D8:
-                    _studentDataBase.SaveAllData();
+                    Console.WriteLine("Update student's data");
                     break;
                 case ConsoleKey.D9:
+                    _studentDataBase.SaveAllData();
+                    break;
+                case ConsoleKey.D0:
                     Console.Clear();
                     break;
                 default:
                     Console.WriteLine("Invalid option. Please choose a valid option from the menu.");
                     break;
             }
+        }
+        private void ShowOptionsForUpdate()
+        {
+            Console.WriteLine("1 = Update grade");
+            Console.WriteLine("2 = Update Address");
+            Console.WriteLine("3 = Show grader and subjects");
+        }
+        private void UpdateStudentData()
+        {
+            var key = Console.ReadKey().Key;
+            switch (key)
+            {
+                case ConsoleKey.D1:
+
+                default:
+                    break;
+            }
+
+
         }
     }
 }
