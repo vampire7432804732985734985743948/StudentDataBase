@@ -244,31 +244,38 @@ namespace Problem.StudentDataBase
             }
         }
 
-        /*public Subject FindSubjectByName(string subjectName)
+        public Subject FindSubject(string subjectName, string albumNumber)
         {
-            Subject subject;
-            if (!string.IsNullOrWhiteSpace(subjectName))
+            if (string.IsNullOrWhiteSpace(subjectName) || string.IsNullOrWhiteSpace(albumNumber))
             {
                 ConsoleInterfaceManager.DrawColoredText("Invalid data", ConsoleColor.Red);
                 return new Subject("Unknown");
             }
-            if (_students != null && _students.Count > 0)
+            Student selectedStudent = FindStudentByAlbumNumber(albumNumber);
+            Subject? selectedSubject = null;
+
+            if (selectedStudent.CourseSubjects != null)
             {
-                foreach (var student in _students)
+                foreach (var subject in selectedStudent.CourseSubjects)
                 {
-                    if (student.FieldOfStudy.Subjects.Contains(new Subject(subjectName)))
+                    if (subject != new Subject(subjectName))
                     {
-                        subject = new Subject(subjectName);
+                        selectedSubject = subject;
+                        break;
                     }
                 }
-
+            }
+            if (selectedSubject != null)
+            {
+                return selectedSubject;
             }
             else
             {
-                ConsoleInterfaceManager.DrawColoredText("Database is empty", ConsoleColor.Red);
+                ConsoleInterfaceManager.DrawColoredText("There is no such subject here", ConsoleColor.Red);
                 return new Subject("Unknown");
             }
-        }*/
+            
+        }
         public void UpdateStudentGrade(string subject, int grade)
         {
             if (!string.IsNullOrEmpty(subject))

@@ -11,9 +11,9 @@ namespace Problem.StudentDataBase.TechnicalStuff
     {
         public static void DrawColoredText<T>(T article, ConsoleColor color)
         {
-            if (!string.IsNullOrEmpty(Convert.ToString(article)) && article != null)
+            if (!string.IsNullOrWhiteSpace(Convert.ToString(article)) && article != null)
             {
-                Console.WriteLine(article.ToString(), Console.ForegroundColor = color);
+                Console.WriteLine(Convert.ToString(article), Console.ForegroundColor = color);
                 Console.ForegroundColor = ConsoleColor.White;
             }
             else

@@ -35,7 +35,7 @@ namespace Problem.StudentDataBase.UserInterface
             Console.WriteLine("5 = Sort students by last name");
             Console.WriteLine("6 = Find student by album number");
             Console.WriteLine("7 = Find all students by last name");
-            Console.WriteLine("8 = Find all students by last name");
+            Console.WriteLine("8 = Change student data");
             Console.WriteLine("9 = Save data");
             Console.WriteLine("0 = Clear console");
         }
@@ -88,6 +88,8 @@ namespace Problem.StudentDataBase.UserInterface
                     break;
                 case ConsoleKey.D8:
                     Console.WriteLine("Update student's data");
+                    ShowOptionsForUpdate();
+                    UpdateStudentData();
                     break;
                 case ConsoleKey.D9:
                     _studentDataBase.SaveAllData();
@@ -102,7 +104,7 @@ namespace Problem.StudentDataBase.UserInterface
         }
         private void ShowOptionsForUpdate()
         {
-            Console.WriteLine("1 = Update grade");
+            Console.WriteLine("1 = Set a grade");
             Console.WriteLine("2 = Update Address");
             Console.WriteLine("3 = Show grader and subjects");
         }
@@ -112,6 +114,12 @@ namespace Problem.StudentDataBase.UserInterface
             switch (key)
             {
                 case ConsoleKey.D1:
+                    Console.Write("Enter required subject name: ");
+                    string subject = Console.ReadLine();
+                    Console.Write("Enter student album number: ");
+                    long idNumber = Convert.ToInt64(Console.ReadLine());
+                    _studentDataBase.FindSubject(albumNumber: idNumber, subjectName: subject);
+                    break;
 
                 default:
                     break;
