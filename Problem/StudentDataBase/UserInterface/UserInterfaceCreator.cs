@@ -69,8 +69,7 @@ namespace Problem.StudentDataBase.UserInterface
                     break;
 
                 case ConsoleKey.D6:
-                    Console.Write("Enter student album number: ");
-                    long idNumber = Convert.ToInt64(Console.ReadLine());
+                    long idNumber = GetStudentAlbumNumber();
                     _studentDataBase.ShowStudentData(_studentDataBase.FindStudentByAlbumNumber(idNumber.ToString()));
                     
                     break;
@@ -88,8 +87,8 @@ namespace Problem.StudentDataBase.UserInterface
                     break;
                 case ConsoleKey.D8:
                     Console.WriteLine("Update student's data");
-                    ShowOptionsForUpdate();
-                    UpdateStudentData();
+                    int studentAlbumNumber = GetStudentAlbumNumber();
+                    UpdateStudentData(studentAlbumNumber);
                     break;
                 case ConsoleKey.D9:
                     _studentDataBase.SaveAllData();
@@ -106,26 +105,56 @@ namespace Problem.StudentDataBase.UserInterface
         {
             Console.WriteLine("1 = Set a grade");
             Console.WriteLine("2 = Update Address");
-            Console.WriteLine("3 = Show grader and subjects");
+            Console.WriteLine("3 = Show grades and subjects");
+            Console.WriteLine("4 = Exit");
         }
-        private void UpdateStudentData()
+        private int GetStudentAlbumNumber()
         {
-            var key = Console.ReadKey().Key;
-            switch (key)
+
+            Console.Write("Enter student album number: ");
+            try
             {
-                case ConsoleKey.D1:
-                    Console.Write("Enter required subject name: ");
-                    string subject = Console.ReadLine();
-                    Console.Write("Enter student album number: ");
-                    long idNumber = Convert.ToInt64(Console.ReadLine());
-                    _studentDataBase.FindSubject(albumNumber: idNumber, subjectName: subject);
-                    break;
+                int albumNumber = Convert.ToInt32(Console.ReadLine());
+                return albumNumber;
 
-                default:
-                    break;
             }
+            catch (Exception)
+            {
+                ConsoleInterfaceManager.DrawColoredText("Invalid value", ConsoleColor.Red);
+                throw;
+            }
+        }
+        private void UpdateStudentData(int albumNumber)
+        {
+            bool isLooped = true;
+            while (isLooped)
+            {
+                ShowOptionsForUpdate();
+                var key = Console.ReadKey().Key;
 
+                switch (key)
+                {
+                    case ConsoleKey.D1:
+                        Console.Write("Enter required subject name: ");
+                        string? subject = Console.ReadLine();
+                        Console.Write("Enter student grade: ");
+                        int grade = Convert.ToInt32(Console.ReadLine());
+                        _studentDataBase.UpdateStudentGrade(subject, albumNumber.ToString(), grade);
+                        break;
+                    case ConsoleKey.D2:
 
+                        break;
+                    case ConsoleKey.D3:
+                        _studentDataBase.ShowCourseInfo(albumNumber.ToString());
+                        break;
+                    case ConsoleKey.D4:
+                        isLooped = false;
+                        break;
+                    default:
+
+                        break;
+                }
+            }
         }
     }
 }

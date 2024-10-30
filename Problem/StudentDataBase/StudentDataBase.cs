@@ -258,7 +258,8 @@ namespace Problem.StudentDataBase
             {
                 foreach (var subject in selectedStudent.CourseSubjects)
                 {
-                    if (subject != new Subject(subjectName))
+                    ConsoleInterfaceManager.DrawColoredText(subject.NameOfSubject, ConsoleColor.Green);
+                    if (subject.NameOfSubject == subjectName)
                     {
                         selectedSubject = subject;
                         break;
@@ -276,11 +277,37 @@ namespace Problem.StudentDataBase
             }
             
         }
-        public void UpdateStudentGrade(string subject, int grade)
+        public void UpdateStudentGrade(string subject, string albumNumber, int grade)
         {
-            if (!string.IsNullOrEmpty(subject))
+            if (string.IsNullOrWhiteSpace(subject) || string.IsNullOrWhiteSpace(albumNumber))
             {
+                ConsoleInterfaceManager.DrawColoredText("Invalid data. Something went wrong here :(", ConsoleColor.Red);
+                return;
+            }
+            var selectedSubject = FindSubject(subject, albumNumber);
 
+            selectedSubject.Grade = grade;
+        }
+        public void ShowCourseInfo(string albumNumber)
+        {
+            ConsoleColor passIndicator = ConsoleColor.Green;
+            var selectedStudent = FindStudentByAlbumNumber(albumNumber);
+            const int MIN_GRADE_TO_PASS_THE_LECTURE = 3;
+            if (selectedStudent != null && selectedStudent.CourseSubjects != null)
+            {
+                foreach (var subject in selectedStudent.CourseSubjects)
+                {
+                    if (subject.Grade < MIN_GRADE_TO_PASS_THE_LECTURE)
+                    {
+                        passIndicator = ConsoleColor.Red;
+                    }
+                    ConsoleInterfaceManager.DrawColoredText($"{subject.NameOfSubject} - {subject.Grade}", passIndicator);
+                    passIndicator = ConsoleColor.Green;
+                }
+            }
+            else
+            {
+                ConsoleInterfaceManager.DrawColoredText("Something went wrong here", ConsoleColor.Red);
             }
         }
     }

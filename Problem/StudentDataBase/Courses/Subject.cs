@@ -19,13 +19,13 @@ namespace Problem.StudentDataBase.Courses
             get { return _grade; }
             set
             {
-                if (value < MAX_GRADE && value > MIN_GRADE)
+                if (value <= MAX_GRADE && value >= MIN_GRADE)
                 {
                     _grade = value;
                 }
                 else
                 {
-                    ConsoleInterfaceManager.DrawColoredText("Invalid data", ConsoleColor.Red);
+                    ConsoleInterfaceManager.DrawColoredText("Invalid grade", ConsoleColor.Red);
                     _grade = 0;
                 }
             }
