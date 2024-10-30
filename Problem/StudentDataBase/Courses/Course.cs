@@ -15,10 +15,6 @@ namespace Problem.StudentDataBase.Courses
             CourseName = name;
             SetSubjects();
         }
-
-        protected virtual void SetSubjects()
-        {
-
-        }
+        protected virtual void SetSubjects() { }
     }
 }

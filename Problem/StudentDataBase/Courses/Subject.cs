@@ -26,7 +26,6 @@ namespace Problem.StudentDataBase.Courses
                 else
                 {
                     ConsoleInterfaceManager.DrawColoredText("Invalid grade", ConsoleColor.Red);
-                    _grade = 0;
                 }
             }
         }

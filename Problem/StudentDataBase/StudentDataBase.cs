@@ -23,7 +23,7 @@ namespace Problem.StudentDataBase
                 }
                 else
                 {
-                    ConsoleInterfaceManager.DrawColoredText("Invalid data", ConsoleColor.Red);
+                    ConsoleInterfaceManager.DrawColoredText(new StringBuilder("Invalid data"), ConsoleColor.Red);
                     _numberOfSubjects = 1;
                 }
             }
@@ -33,7 +33,7 @@ namespace Problem.StudentDataBase
         {
             _students = JSONSerializer.DeserializeData<List<Student>>("JSONStudentDataBase.json");
         }
-        private (string? name, string? lastName, string? sex, string? pesselNumber, string? albumNumber, string? password, string? address, Course? fieldOfStudy) AddStudentData()
+        private (string? name, string? lastName, string? sex, string? pesselNumber, string? albumNumber, string? password, string? address, Course fieldOfStudy) AddStudentData()
         {
             Console.Write("Name:");
             string? name = Console.ReadLine();
@@ -51,6 +51,11 @@ namespace Problem.StudentDataBase
             string? address = Console.ReadLine();
             Console.Write("Field of study: ");
             string? fieldOfStudy = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(fieldOfStudy))
+            {
+                ConsoleInterfaceManager.DrawColoredText(new StringBuilder("Null reference return"), ConsoleColor.Red);
+                throw new ArgumentException("Invalid data");
+            }
             Course course = CoursesFactory.CreateCourse(fieldOfStudy);
 
             return (name, lastName, sex, pesselNumber, albumNumber, password, address, course);
@@ -85,9 +90,10 @@ namespace Problem.StudentDataBase
             Console.WriteLine($"Name: {student.Name}");
             Console.WriteLine($"Last name: {student.LastName}");
             Console.WriteLine($"Sex: {student.Sex}");
-            Console.WriteLine($"Pessel {student.PesselNumber}");
-            Console.WriteLine($"Album number {student.AlbumNumber}");
-            Console.WriteLine($"Address {student.Address}");
+            Console.WriteLine($"Pessel: {student.PesselNumber}");
+            Console.WriteLine($"Album number: {student.AlbumNumber}");
+            Console.WriteLine($"Address: {student.Address}");
+            Console.WriteLine($"Course: {student.FieldOfStudy.CourseName}");
             
         }
         public void ShowAllStudents()
@@ -101,7 +107,7 @@ namespace Problem.StudentDataBase
             }
             else
             {
-                ConsoleInterfaceManager.DrawColoredText("There are no students!", ConsoleColor.Red);
+                ConsoleInterfaceManager.DrawColoredText(new StringBuilder("There are no students!"), ConsoleColor.Red);
             }
         }
         public void ShowAllStudents(List<Student> students)
@@ -115,7 +121,7 @@ namespace Problem.StudentDataBase
             }
             else
             {
-                ConsoleInterfaceManager.DrawColoredText("Database  is empty",  ConsoleColor.Red);
+                ConsoleInterfaceManager.DrawColoredText(new StringBuilder("Database  is empty"),  ConsoleColor.Red);
             }
         }
         private string EnterObligateData()
@@ -142,7 +148,7 @@ namespace Problem.StudentDataBase
             {
                 if (albumNumber.Length != UserData.NUMBER_OF_DIGITS_ALBUM_NUMBER)
                 {
-                    ConsoleInterfaceManager.DrawColoredText("Invalid input", ConsoleColor.Red);
+                    ConsoleInterfaceManager.DrawColoredText(new StringBuilder("Invalid input"), ConsoleColor.Red);
                     return selectedStudent;
                 }
                 foreach (var student in _students)
@@ -161,13 +167,13 @@ namespace Problem.StudentDataBase
                 }
                 else
                 {
-                    ConsoleInterfaceManager.DrawColoredText("There is no such student here", ConsoleColor.Red);
+                    ConsoleInterfaceManager.DrawColoredText(new StringBuilder("There is no such student here"), ConsoleColor.Red);
                     return new Student(default, default, default, default, default, default, default, default);
                 }
             }
             else
             {
-                ConsoleInterfaceManager.DrawColoredText("Database is empty", ConsoleColor.Red);
+                ConsoleInterfaceManager.DrawColoredText(new StringBuilder("Database is empty"), ConsoleColor.Red);
                 return new Student(default, default, default, default, default, default, default, default);
             }
         }
@@ -187,7 +193,7 @@ namespace Problem.StudentDataBase
                 }
                 if (students.Count <= 0)
                 {
-                    ConsoleInterfaceManager.DrawColoredText("There are no such students here", ConsoleColor.Red);
+                    ConsoleInterfaceManager.DrawColoredText(new StringBuilder("There are no such students here"), ConsoleColor.Red);
                     return new List<Student>();
                 }
                 else
@@ -197,7 +203,7 @@ namespace Problem.StudentDataBase
             }
             else
             {
-                ConsoleInterfaceManager.DrawColoredText("The database is empty", ConsoleColor.Red);
+                ConsoleInterfaceManager.DrawColoredText(new StringBuilder("The database is empty"), ConsoleColor.Red);
                 return new List<Student>();
             }
         }
@@ -235,12 +241,12 @@ namespace Problem.StudentDataBase
                         return;
                     }
                 }
-                ConsoleInterfaceManager.DrawColoredText("There is no  such student", ConsoleColor.Red);
+                ConsoleInterfaceManager.DrawColoredText(new StringBuilder("There is no  such student"), ConsoleColor.Red);
                 return;
             }
             else
             {
-                ConsoleInterfaceManager.DrawColoredText("The database is empty", ConsoleColor.Red);
+                ConsoleInterfaceManager.DrawColoredText(new StringBuilder("The database is empty"), ConsoleColor.Red);
             }
         }
 
@@ -248,7 +254,7 @@ namespace Problem.StudentDataBase
         {
             if (string.IsNullOrWhiteSpace(subjectName) || string.IsNullOrWhiteSpace(albumNumber))
             {
-                ConsoleInterfaceManager.DrawColoredText("Invalid data", ConsoleColor.Red);
+                ConsoleInterfaceManager.DrawColoredText(new StringBuilder("Invalid data"), ConsoleColor.Red);
                 return new Subject("Unknown");
             }
             Student selectedStudent = FindStudentByAlbumNumber(albumNumber);
@@ -272,7 +278,7 @@ namespace Problem.StudentDataBase
             }
             else
             {
-                ConsoleInterfaceManager.DrawColoredText("There is no such subject here", ConsoleColor.Red);
+                ConsoleInterfaceManager.DrawColoredText(new StringBuilder("There is no such subject here"), ConsoleColor.Red);
                 return new Subject("Unknown");
             }
             
@@ -281,7 +287,7 @@ namespace Problem.StudentDataBase
         {
             if (string.IsNullOrWhiteSpace(subject) || string.IsNullOrWhiteSpace(albumNumber))
             {
-                ConsoleInterfaceManager.DrawColoredText("Invalid data. Something went wrong here :(", ConsoleColor.Red);
+                ConsoleInterfaceManager.DrawColoredText(new StringBuilder("Invalid data. Something went wrong here :("), ConsoleColor.Red);
                 return;
             }
             var selectedSubject = FindSubject(subject, albumNumber);
@@ -307,7 +313,7 @@ namespace Problem.StudentDataBase
             }
             else
             {
-                ConsoleInterfaceManager.DrawColoredText("Something went wrong here", ConsoleColor.Red);
+                ConsoleInterfaceManager.DrawColoredText(new StringBuilder("Something went wrong here"), ConsoleColor.Red);
             }
         }
     }

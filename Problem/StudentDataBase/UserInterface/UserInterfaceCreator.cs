@@ -1,4 +1,5 @@
-﻿using Problem.StudentDataBase.DataContainer;
+﻿using Problem.StudentDataBase.Courses;
+using Problem.StudentDataBase.DataContainer;
 using Problem.StudentDataBase.TechnicalStuff;
 using Problem.StudentDataBase.UserLogIn;
 using System;
@@ -137,6 +138,11 @@ namespace Problem.StudentDataBase.UserInterface
                     case ConsoleKey.D1:
                         Console.Write("Enter required subject name: ");
                         string? subject = Console.ReadLine();
+                        if (string.IsNullOrWhiteSpace(subject))
+                        {
+                            ConsoleInterfaceManager.DrawColoredText("Null reference return", ConsoleColor.Red);
+                            break;
+                        }
                         Console.Write("Enter student grade: ");
                         int grade = Convert.ToInt32(Console.ReadLine());
                         _studentDataBase.UpdateStudentGrade(subject, albumNumber.ToString(), grade);

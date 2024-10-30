@@ -38,7 +38,6 @@ namespace Problem.StudentDataBase.TechnicalStuff
                 Console.WriteLine("The data are empty");
             }
         }
-
         public static T DeserializeData<T>(string readingFileName)
         {
             string readingFilePath = Path.Combine(folderPath, readingFileName);
@@ -57,11 +56,18 @@ namespace Problem.StudentDataBase.TechnicalStuff
 
             try
             {
-                return JsonSerializer.Deserialize<T>(jsonString, new JsonSerializerOptions
+                T? result = JsonSerializer.Deserialize<T>(jsonString, new JsonSerializerOptions
                 {
-                    PropertyNameCaseInsensitive = true, 
+                    PropertyNameCaseInsensitive = true,
                     Converters = { new CourseClassConverter() }
                 });
+
+                if (result == null)
+                {
+                    throw new InvalidOperationException("Deserialization returned null.");
+                }
+
+                return result;
             }
             catch (Exception ex)
             {

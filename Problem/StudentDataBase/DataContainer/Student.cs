@@ -29,7 +29,7 @@ namespace Problem.StudentDataBase.DataContainer
             AlbumNumber = albumNumber ?? "Unknown";
             Password = password ?? "Invalid password";
             Address = address ?? "Unknown";
-            FieldOfStudy = fieldOfStudy;
+            FieldOfStudy = fieldOfStudy ?? new Course("Unknown");
             SetSubjectList();
         }
 

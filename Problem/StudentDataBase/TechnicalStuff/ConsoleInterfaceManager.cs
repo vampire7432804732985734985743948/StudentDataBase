@@ -11,7 +11,7 @@ namespace Problem.StudentDataBase.TechnicalStuff
     {
         public static void DrawColoredText<T>(T article, ConsoleColor color)
         {
-            if (!string.IsNullOrWhiteSpace(Convert.ToString(article)) && article != null)
+            if (article != null || !string.IsNullOrWhiteSpace(Convert.ToString(article)))
             {
                 Console.WriteLine(Convert.ToString(article), Console.ForegroundColor = color);
                 Console.ForegroundColor = ConsoleColor.White;
@@ -23,7 +23,8 @@ namespace Problem.StudentDataBase.TechnicalStuff
         }
         public static void CentralizeText(string text)
         {
-            Console.SetCursorPosition((Console.WindowWidth - text.Length) / 2, Console.CursorTop);
+            const int HALF_SCREEN_WIDTH = 2;
+            Console.SetCursorPosition((Console.WindowWidth - text.Length) / HALF_SCREEN_WIDTH, Console.CursorTop);
             Console.WriteLine(text);
         }
     }
