@@ -10,9 +10,8 @@ namespace Problem.StudentDataBase.TechnicalStuff
     internal static class JSONSerializer
     {
         static public string folderName = "UniversityData";
-        static public string fileName = "JSONStudentDataBase.json";
         static string folderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), folderName);
-        static public string filePath = Path.Combine(folderPath, fileName);
+        static public string filePath;
 
         private static string SerializeData<T>(T data)
         {
@@ -22,8 +21,13 @@ namespace Problem.StudentDataBase.TechnicalStuff
             });
             return serializedObject.ToString();
         }
-        public static void SaveAllData<T>(T data)
+        public static void SaveAllData<T>(T data, string filename)
         {
+            if (!filename.Contains(".json")) 
+            {
+                filename += ".json";
+            }
+            filePath = Path.Combine(folderPath, filename);
             if (data != null)
             {
                 Directory.CreateDirectory(folderPath);

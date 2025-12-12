@@ -82,7 +82,7 @@ namespace Problem.StudentDataBase
         }
         public void SaveAllData()
         {
-            JSONSerializer.SaveAllData(_students);
+            JSONSerializer.SaveAllData(_students, "Student");
         }
         public void ShowStudentData(Student student)
         {
