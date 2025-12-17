@@ -7,9 +7,10 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        List<Root<Customer>> customerRoots = new List<Root<Customer>>()
+        // ------------------ Customers ------------------
+        var customers = new List<Customer>()
         {
-            new Root<Customer>(new Customer()
+            new Customer
             {
                 CustomerId = 1,
                 CustomerName = "John",
@@ -19,8 +20,8 @@ internal class Program
                 City = "Springfield",
                 Email = "john@gmail.com",
                 Phone = "123-456-7890"
-            }),
-            new Root<Customer>(new Customer()
+            },
+            new Customer
             {
                 CustomerId = 2,
                 CustomerName = "Alice",
@@ -30,8 +31,8 @@ internal class Program
                 City = "Rivertown",
                 Email = "alice@example.com",
                 Phone = "321-654-9870"
-            }),
-            new Root<Customer>(new Customer()
+            },
+            new Customer
             {
                 CustomerId = 3,
                 CustomerName = "Bob",
@@ -41,8 +42,8 @@ internal class Program
                 City = "Greendale",
                 Email = "bob@example.com",
                 Phone = "+441234567890"
-            }),
-            new Root<Customer>(new Customer()
+            },
+            new Customer
             {
                 CustomerId = 4,
                 CustomerName = "Clara",
@@ -52,13 +53,13 @@ internal class Program
                 City = "Hillview",
                 Email = "clara@example.com",
                 Phone = "987-654-3210"
-            })
+            }
         };
 
         // ------------------ Employees ------------------
-        List<Root<Employee>> employeeRoots = new List<Root<Employee>>()
+        var employees = new List<Employee>()
         {
-            new Root<Employee>(new Employee()
+            new Employee
             {
                 EmployeeId = 1,
                 FirstName = "Michael",
@@ -68,8 +69,8 @@ internal class Program
                 Email = "michael.smith@example.com",
                 Phone = "111-222-3333",
                 HireDate = new DateTime(2018, 3, 15)
-            }),
-            new Root<Employee>(new Employee()
+            },
+            new Employee
             {
                 EmployeeId = 2,
                 FirstName = "Sarah",
@@ -79,13 +80,13 @@ internal class Program
                 Email = "sarah.johnson@example.com",
                 Phone = "222-333-4444",
                 HireDate = new DateTime(2020, 7, 1)
-            })
+            }
         };
 
         // ------------------ Products ------------------
-        List<Root<Product>> productRoots = new List<Root<Product>>()
+        var products = new List<Product>()
         {
-            new Root<Product>(new Product()
+            new Product
             {
                 ProductId = 1,
                 ProductName = "Laptop",
@@ -93,8 +94,8 @@ internal class Program
                 Price = 1200.50m,
                 StockQuantity = 10,
                 Supplier = "TechCorp"
-            }),
-            new Root<Product>(new Product()
+            },
+            new Product
             {
                 ProductId = 2,
                 ProductName = "Smartphone",
@@ -102,8 +103,8 @@ internal class Program
                 Price = 800.00m,
                 StockQuantity = 20,
                 Supplier = "MobileInc"
-            }),
-            new Root<Product>(new Product()
+            },
+            new Product
             {
                 ProductId = 3,
                 ProductName = "Headphones",
@@ -111,46 +112,137 @@ internal class Program
                 Price = 150.00m,
                 StockQuantity = 50,
                 Supplier = "SoundCo"
-            })
+            }
         };
 
-        // ------------------ Orders ------------------
-        List<Root<Order>> orderRoots = new List<Root<Order>>()
+        // ------------------ Orders (EMBEDDED DOCUMENTS) ------------------
+        var orders = new List<Root<Order>>()
+{
+    new Root<Order>(new Order
+    {
+        OrderId = 1,
+        OrderDate = DateTime.Now,
+
+        Customer = new Customer
         {
-            new Root<Order>(new Order()
-            {
-                OrderId = 1,
-                CustomerId = 1,
-                EmployeeId = 2,
-                OrderDate = DateTime.Now,
-                Products = new List<OrderItem>()
-                {
-                    new OrderItem() { ProductId = 1, Quantity = 1, Price = 1200.50m },
-                    new OrderItem() { ProductId = 2, Quantity = 2, Price = 1600.00m }
-                },
-                TotalAmount = 2800.50m,
-                Status = "Pending"
-            }),
-            new Root<Order>(new Order()
-            {
-                OrderId = 2,
-                CustomerId = 3,
-                EmployeeId = 1,
-                OrderDate = DateTime.Now,
-                Products = new List<OrderItem>()
-                {
-                    new OrderItem() { ProductId = 3, Quantity = 2, Price = 300.00m }
-                },
-                TotalAmount = 300.00m,
-                Status = "Shipped"
-            })
-        };
+            CustomerId = customers[0].CustomerId,
+            CustomerName = customers[0].CustomerName,
+            CustomerType = customers[0].CustomerType,
+            CustomerNumber = customers[0].CustomerNumber,
+            Address = customers[0].Address,
+            City = customers[0].City,
+            Email = customers[0].Email,
+            Phone = customers[0].Phone
+        },
 
-        // ------------------ Save all data ------------------
-        JSONSerializer.SaveAllData(customerRoots, "Customers");
-        JSONSerializer.SaveAllData(employeeRoots, "Employee");
-        JSONSerializer.SaveAllData(productRoots, "Products");
-        JSONSerializer.SaveAllData(orderRoots, "Orders");
+        Employee = new Employee
+        {
+            EmployeeId = employees[1].EmployeeId,
+            FirstName = employees[1].FirstName,
+            LastName = employees[1].LastName,
+            Position = employees[1].Position,
+            Department = employees[1].Department,
+            Email = employees[1].Email,
+            Phone = employees[1].Phone
+            // HireDate intentionally omitted
+        },
+
+        Products = new List<OrderItem>
+        {
+            new OrderItem
+            {
+                Product = new Product
+                {
+                    ProductId = products[0].ProductId,
+                    ProductName = products[0].ProductName,
+                    Category = products[0].Category,
+                    Price = products[0].Price,
+                    StockQuantity = products[0].StockQuantity,
+                    Supplier = products[0].Supplier
+                },
+                Quantity = 1,
+                UnitPrice = 1200.50m,
+                WasProductUsed = true
+            },
+            new OrderItem
+            {
+                Product = new Product
+                {
+                    ProductId = products[1].ProductId,
+                    ProductName = products[1].ProductName,
+                    Category = products[1].Category,
+                    Price = products[1].Price,
+                    StockQuantity = products[1].StockQuantity,
+                    Supplier = products[1].Supplier
+                },
+                Quantity = 2,
+                UnitPrice = 800.00m,
+                WasProductUsed = false
+            }
+        },
+
+        TotalAmount = 1200.50m + (2 * 800.00m),
+        Status = "Pending"
+    }),
+
+    new Root<Order>(new Order
+    {
+        OrderId = 2,
+        OrderDate = DateTime.Now,
+
+        Customer = new Customer
+        {
+            CustomerId = customers[2].CustomerId,
+            CustomerName = customers[2].CustomerName,
+            CustomerType = customers[2].CustomerType,
+            CustomerNumber = customers[2].CustomerNumber,
+            Address = customers[2].Address,
+            City = customers[2].City,
+            Email = customers[2].Email,
+            Phone = customers[2].Phone
+        },
+
+        Employee = new Employee
+        {
+            EmployeeId = employees[0].EmployeeId,
+            FirstName = employees[0].FirstName,
+            LastName = employees[0].LastName,
+            Position = employees[0].Position,
+            Department = employees[0].Department,
+            Email = employees[0].Email,
+            Phone = employees[0].Phone
+            // HireDate intentionally omitted
+        },
+
+        Products = new List<OrderItem>
+        {
+            new OrderItem
+            {
+                Product = new Product
+                {
+                    ProductId = products[2].ProductId,
+                    ProductName = products[2].ProductName,
+                    Category = products[2].Category,
+                    Price = products[2].Price,
+                    StockQuantity = products[2].StockQuantity,
+                    Supplier = products[2].Supplier
+                },
+                Quantity = 2,
+                UnitPrice = 150.00m,
+                WasProductUsed = false,
+            }
+        },
+
+        TotalAmount = 2 * 150.00m,
+        Status = "Shipped"
+    })
+};
+
+
+        // ------------------ Save collections ------------------
+        JSONSerializer.SaveAllData(customers, new Customer().GetName());
+        JSONSerializer.SaveAllData(employees, new Employee().GetName());
+        JSONSerializer.SaveAllData(products, new Product().GetName());
+        JSONSerializer.SaveAllData(orders, new Order().GetName());
     }
 }
-
